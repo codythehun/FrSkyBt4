@@ -7,7 +7,8 @@
 
 SoftwareSerial softSerial(4, 7, true);
 TelemetryStreamParser telemParser;
-//RCTelemetry_BLE ble(1,2,3);
+
+RCTelemetry_BLE ble(10,2,9);
 
 void newSensorValue(const Measurement& msr)
 {
@@ -27,6 +28,10 @@ void newSensorValue(const Measurement& msr)
 		case Measurement::CURRENT: log_notice("Current[%u]: %ld\n", sensorId, data.genericValue); break;
 
 	}
+	if (ble.getState() == ACI_EVT_CONNECTED) {
+		log_notice("Publishing %d", 2);
+		ble.publishMeasurement(msr);
+	}
 }
 
 void setup()
@@ -34,6 +39,7 @@ void setup()
 	softSerial.begin(57600);
 	Serial.begin(57600);
 	telemParser.setMeasurementReadCallback(newSensorValue);
+	ble.begin();
 	/* add setup code here */
 
 }
@@ -44,10 +50,9 @@ void loop()
 		uint8_t data = softSerial.read();
 		if (data >= 0) {
 			telemParser.parseByte(data);
-
 		}
 	}
-
+	ble.loop();
 	/* add main program code here */
 
 }
