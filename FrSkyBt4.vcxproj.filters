@@ -21,24 +21,24 @@
     <ClInclude Include="Visual Micro\.FrSkyBt4.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Measurement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TelemetryStreamParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SPortMeasurements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Measurement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TelemetryStreamParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPortMeasurements.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

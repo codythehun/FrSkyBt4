@@ -4,7 +4,8 @@
 #include "Measurement.h"
 
 
-// Discover sensors, warmup period, or even during. Set them in a bitmap. bt characteristic for available sensors
+// FrSky telemetry stream parser, currently only supports digital sensors over SPort protocol
+// TODO: support for all sensor types, including old hub sensors. Support for old protocol over RS232
 class TelemetryStreamParser {
 public:
 	typedef void(*MeasurementReadCallback)(const Measurement& msr);

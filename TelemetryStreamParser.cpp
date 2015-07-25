@@ -1,4 +1,5 @@
 #include "TelemetryStreamParser.h"
+#include "SPortMeasurements.h"
 #include "Utils.h"
 
 #define TELEMETRY_PACKET_SEP  0x7E
@@ -80,69 +81,69 @@ void TelemetryStreamParser::updateMeasurementFromSportPacket()
 	if (prim == DATA_FRAME) {
 		log_debug("New frame: sensor: %x, id: %x\n", dataId, appId);
 		if (appId == RSSI_ID) {
-			measurement.updateRssi(SPORT_DATA_U8(telemetry_buffer));
+			updateRssiFromSport(measurement, SPORT_DATA_U8(telemetry_buffer));
 		}
 		else  if (appId >= GPS_ALT_FIRST_ID && appId <= GPS_ALT_LAST_ID) {
-			measurement.updateGpsAltitude(SPORT_DATA_S32(telemetry_buffer));
+			updateGpsAltitudeFromSport(measurement, SPORT_DATA_S32(telemetry_buffer));
 
 		}
 		else if (appId >= GPS_TIME_DATE_FIRST_ID && appId <= GPS_TIME_DATE_LAST_ID) {
-			measurement.updateGpsDateTimeFromSport(SPORT_DATA_U32(telemetry_buffer));
+			updateGpsDateTimeFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 
 		}
 		else if (appId >= GPS_LONG_LATI_FIRST_ID && appId <= GPS_LONG_LATI_LAST_ID) {
-			measurement.updateGpsPosFromSport(SPORT_DATA_U32(telemetry_buffer));
+			updateGpsPosFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= CURR_FIRST_ID && appId <= CURR_LAST_ID) {
-			measurement.updateCurrent(SPORT_DATA_U32(telemetry_buffer));
+			updateCurrentFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= CELLS_FIRST_ID && appId <= CELLS_LAST_ID) {
-			measurement.updateBatteryCellVoltage(SPORT_DATA_U32(telemetry_buffer), 0);
+			updateBatteryCellVoltageFromSport(measurement, SPORT_DATA_U32(telemetry_buffer), 0);
 			// Packet might have two cell values:
-			if (measurement.getData().batteryVoltage.cellIndex + 1 < measurement.getData().batteryVoltage.cellCount) {
-				measurement.setSensorId(dataId);
+			if (measurement.data.batteryVoltage.cellIndex + 1 < measurement.data.batteryVoltage.cellCount) {
+				measurement.sensorId = dataId;
 				if (msrReadCallback) {
 					msrReadCallback(measurement);
 				}
-				measurement.updateBatteryCellVoltage(SPORT_DATA_U32(telemetry_buffer), 1);
+				updateBatteryCellVoltageFromSport(measurement, SPORT_DATA_U32(telemetry_buffer), 1);
 			}
 		}
 		else if (appId >= T1_FIRST_ID && appId <= T2_LAST_ID) {
-			measurement.updateTemperature(SPORT_DATA_U32(telemetry_buffer));
+			updateTemperatureFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= RPM_FIRST_ID && appId <= RPM_LAST_ID) {
-			measurement.updateRpm(SPORT_DATA_U32(telemetry_buffer));
+			updateRpmFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= FUEL_FIRST_ID && appId <= FUEL_LAST_ID) {
-			measurement.updateFuel(SPORT_DATA_U32(telemetry_buffer));
+			updateFuelFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= ALT_FIRST_ID && appId <= ALT_LAST_ID) {
-			measurement.updateBaroAltitude(SPORT_DATA_U32(telemetry_buffer));
+			updateBaroAltitudeFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= ACCX_FIRST_ID && appId <= ACCX_LAST_ID) {
-			measurement.updateAccelX(SPORT_DATA_U32(telemetry_buffer));
+			updateAccelXFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= ACCY_FIRST_ID && appId <= ACCY_LAST_ID) {
-			measurement.updateAccelY(SPORT_DATA_U32(telemetry_buffer));
+			updateAccelYFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= ACCZ_FIRST_ID && appId <= ACCZ_LAST_ID) {
-			measurement.updateAccelZ(SPORT_DATA_U32(telemetry_buffer));
+			updateAccelZFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= AIR_SPEED_FIRST_ID && appId <= AIR_SPEED_LAST_ID) {
-			measurement.updateAirSpeed(SPORT_DATA_U32(telemetry_buffer));
+			updateAirSpeedFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= GPS_SPEED_FIRST_ID && appId <= GPS_SPEED_LAST_ID) {
-			measurement.updateGpsSpeed(SPORT_DATA_U32(telemetry_buffer));
+			updateGpsSpeedFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else if (appId >= GPS_COURS_FIRST_ID && appId <= GPS_COURS_LAST_ID) {
-			measurement.updateGpsCourse(SPORT_DATA_U32(telemetry_buffer));
+			updateGpsCourseFromSport(measurement, SPORT_DATA_U32(telemetry_buffer));
 		}
 		else {
 			log_debug(" Unkown frame id : %x\n", appId);
 			return;
 		}
 
-		measurement.setSensorId(dataId);
+		measurement.sensorId = dataId;
 
 		if (msrReadCallback) {
 			msrReadCallback(measurement);
