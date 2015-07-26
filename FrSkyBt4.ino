@@ -26,11 +26,14 @@ void newSensorValue(const Measurement& msr)
 			break;
 		case Measurement::BARO_ALTITUDE: log_notice("Altitude[%u]: %ld\n", sensorId, data.genericValue); break;
 		case Measurement::CURRENT: log_notice("Current[%u]: %ld\n", sensorId, data.genericValue); break;
-
+		default: return; break;
 	}
 	if (ble.getState() == ACI_EVT_CONNECTED) {
-		log_notice("Publishing %d", 2);
+		//log_notice("Publishing %d\n", 2);
 		ble.publishMeasurement(msr);
+	}
+	else {
+		//log_notice("Status: %d\n", ble.getState());
 	}
 }
 
@@ -46,12 +49,16 @@ void setup()
 
 void loop()
 {
+	if (softSerial.overflow()) {
+		Serial.println("Overflow!");
+	}
 	if (softSerial.available()) {
 		uint8_t data = softSerial.read();
 		if (data >= 0) {
 			telemParser.parseByte(data);
 		}
 	}
+
 	ble.loop();
 	/* add main program code here */
 

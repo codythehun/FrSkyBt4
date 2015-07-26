@@ -84,6 +84,4 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <SPortMeasurements.h>
 #include <TelemetryStreamParser.cpp>
 #include <TelemetryStreamParser.h>
-#include <Utils.cpp>
-#include <Utils.h>
 #endif

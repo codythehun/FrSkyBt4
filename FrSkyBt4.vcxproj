@@ -76,13 +76,11 @@
   <ItemGroup>
     <ClInclude Include="SPortMeasurements.h" />
     <ClInclude Include="TelemetryStreamParser.h" />
-    <ClInclude Include="Utils.h" />
     <ClInclude Include="Visual Micro\.FrSkyBt4.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPortMeasurements.cpp" />
     <ClCompile Include="TelemetryStreamParser.cpp" />
-    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
